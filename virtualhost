@@ -11,6 +11,7 @@ owner=$(who am i | awk '{print $1}')
 sitesEnable='/etc/nginx/sites-enabled/'
 sitesAvailable='/etc/nginx/sites-available/'
 userDir='/var/www/'
+tplVhost='/usr/local/bin/vhost.tpl'
 SED=`which sed`
 
 if [ "$(whoami)" != 'root' ]; then
@@ -67,11 +68,9 @@ if [ "$action" == 'create' ]
 			fi
 		fi
 
-		CONFIG=$sitesAvailable$domain.conf
-
 		### create virtual host rules file
 		CONFIG=$sitesAvailable$domain.conf
-		sudo cp virtual_host.template $CONFIG
+		sudo cp $tplVhost $CONFIG
 		sudo $SED -i "s/DOMAIN/$domain/g" $CONFIG
 		sudo $SED -i "s/PHPVERSION/$phpv/g" $CONFIG
 		sudo $SED -i "s!DIR!$userDir$rootDir\/!g" $CONFIG
